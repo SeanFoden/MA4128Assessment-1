@@ -18,3 +18,37 @@ A number of different methods are used to calculate VaR.
 
 It is worth noting that the Monte Carlo method isn't perfect.  The models for generating trial conditions and for inferring instrument performance from them must make simplifying assumptions, and the distribution that comes out won’t be more accurate than these models going in.
 
+<pre><code>
+def trialValues(seed: Long, numTrials: Int, instruments: Seq[Instrument],
+      factorMeans: Array[Double], factorCovariances: Array[Array[Double]]): Seq[Double] = {
+    val rand = new MersenneTwister(seed)
+    val multivariateNormal = new MultivariateNormalDistribution(rand, factorMeans,
+      factorCovariances)
+ 
+    val trialValues = new Array[Double](numTrials)
+    for (i <- 0 until numTrials) {
+      val trial = multivariateNormal.sample()
+      trialValues(i) = trialValue(trial, instruments)
+    }
+    trialValues
+  }
+ 
+  def trialValue(trial: Array[Double], instruments: Seq[Instrument]): Double = {
+    var totalValue = 0.0
+    for (instrument <- instruments) {
+      totalValue += instrumentTrialValue(instrument, trial)
+    }
+    totalValue
+  }
+ 
+  def instrumentTrialValue(instrument: Instrument, trial: Array[Double]): Double = {
+    var instrumentTrialValue = 0.0
+    var i = 0
+    while (i < trial.length) {
+      instrumentTrialValue += trial(i) * instrument.factorWeights(i)
+      i += 1
+    }
+    Math.min(Math.max(instrumentTrialValue, instrument.minValue), instrument.maxValue)
+  }
+
+</code></pre>
