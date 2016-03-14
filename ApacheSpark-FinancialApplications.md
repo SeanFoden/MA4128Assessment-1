@@ -24,36 +24,6 @@ In its most general form the Monte Carlo method:
 * Calculates the portfolio loss for each trial, and uses the aggregated trial data to build up a profile of the portfolio’s risk characteristics.
 
 <pre><code>
-def trialValues(seed: Long, numTrials: Int, instruments: Seq[Instrument],
-      factorMeans: Array[Double], factorCovariances: Array[Array[Double]]): Seq[Double] = {
-    val rand = new MersenneTwister(seed)
-    val multivariateNormal = new MultivariateNormalDistribution(rand, factorMeans,
-      factorCovariances)
- 
-    val trialValues = new Array[Double](numTrials)
-    for (i <- 0 until numTrials) {
-      val trial = multivariateNormal.sample()
-      trialValues(i) = trialValue(trial, instruments)
-    }
-    trialValues
-  }
- 
-  def trialValue(trial: Array[Double], instruments: Seq[Instrument]): Double = {
-    var totalValue = 0.0
-    for (instrument <- instruments) {
-      totalValue += instrumentTrialValue(instrument, trial)
-    }
-    totalValue
-  }
- 
-  def instrumentTrialValue(instrument: Instrument, trial: Array[Double]): Double = {
-    var instrumentTrialValue = 0.0
-    var i = 0
-    while (i < trial.length) {
-      instrumentTrialValue += trial(i) * instrument.factorWeights(i)
-      i += 1
-    }
-    Math.min(Math.max(instrumentTrialValue, instrument.minValue), instrument.maxValue)
-  }
+Insert code
 
 </code></pre>
