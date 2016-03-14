@@ -31,6 +31,17 @@ It is possible to choose more complicated models, perhaps incorporating domain s
 
 The model also needs a process for simulating the behavior of market factors. A simple assumption is that each market factor follows a normal distribution. To capture the fact that market factors are often correlated – when NASDAQ is down, the Dow is likely to be suffering as well – multivariate normal distribution can be used with a non-diagonal covariance matrix. As above, a more complicated method of simulating the market or a different distribution for each market factor can be assumed, perhaps one with a fatter tail.
 
+To summarize, trial conditions are drawn from a multivariate normal distribution:
+
+
+
+The value of a particular instrument in a particular trial is the dot product of the trial conditions and the instrument’s factor weightswi bounded by the instrument’s minimum and maximum value, ni and xi:
+
+
+
+The portfolio’s value for the trial is the sum of all instrument values for that trial:
+
+
 <pre><code>
 Insert code
 
