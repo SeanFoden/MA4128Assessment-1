@@ -16,7 +16,7 @@ A number of different methods are used to calculate VaR.
 2. Historical simulation
 3. Monte Carlo simulation
 
-It is worth noting that the Monte Carlo method **isn't perfect**.  The models for generating trial conditions and for inferring instrument performance from them must make simplifying assumptions, and the distribution that comes out won’t be more accurate than these models going in.
+It is worth noting that the Monte Carlo method _isn't perfect_**.  The models for generating trial conditions and for inferring instrument performance from them must make simplifying assumptions, and the distribution that comes out won’t be more accurate than these models going in.
 
 In its most general form the Monte Carlo method:
 * Defines a relationship between market conditions and each instrument’s returns
