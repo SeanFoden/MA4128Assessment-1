@@ -2,7 +2,7 @@ Apache Spark
 =========
 Financial Applications
 ----------
-Over recent years there has been significant progress in the area of risk assessment and creating financial management portfolios that take risk into account.  This area of study is relatively new and has only gathered momentum since the 2000's.  Events around the world have highlighted the need for investors to be able accurately assess risks they may undertake while trading.
+Over recent years there has been significant progress in the area of risk assessment using the creation financial management portfolios that take risk into account.  This area of study is relatively new and has only gathered momentum since the 2000's.  Events around the world have highlighted the need for investors to be able accurately assess risks they may undertake while trading.
 
 Spark facilitates the calculation of computationally-intensive statistics such as VaR via the Monte Carlo method.
 It allows an individual to better understand the risk characteristics of large portfolios, enablig them to compute it before executing trades to help make informed and immediate decisions.
@@ -17,6 +17,11 @@ A number of different methods are used to calculate VaR.
 3. Monte Carlo simulation
 
 It is worth noting that the Monte Carlo method isn't perfect.  The models for generating trial conditions and for inferring instrument performance from them must make simplifying assumptions, and the distribution that comes out won’t be more accurate than these models going in.
+
+In its most general form the Monte Carlo method:
+*Defines a relationship between market conditions and each instrument’s returns
+*Poses “trials” consisting of random market conditions
+*Calculates the portfolio loss for each trial, and uses the aggregated trial data to build up a profile of the portfolio’s risk characteristics.
 
 <pre><code>
 def trialValues(seed: Long, numTrials: Int, instruments: Seq[Instrument],
