@@ -19,9 +19,9 @@ A number of different methods are used to calculate VaR.
 It is worth noting that the Monte Carlo method isn't perfect.  The models for generating trial conditions and for inferring instrument performance from them must make simplifying assumptions, and the distribution that comes out won’t be more accurate than these models going in.
 
 In its most general form the Monte Carlo method:
-*Defines a relationship between market conditions and each instrument’s returns
-*Poses “trials” consisting of random market conditions
-*Calculates the portfolio loss for each trial, and uses the aggregated trial data to build up a profile of the portfolio’s risk characteristics.
+* Defines a relationship between market conditions and each instrument’s returns
+* Poses “trials” consisting of random market conditions
+* Calculates the portfolio loss for each trial, and uses the aggregated trial data to build up a profile of the portfolio’s risk characteristics.
 
 <pre><code>
 def trialValues(seed: Long, numTrials: Int, instruments: Seq[Instrument],
