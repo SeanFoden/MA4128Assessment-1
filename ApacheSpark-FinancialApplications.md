@@ -59,7 +59,7 @@ A general sketch of our computation looks like:
 4. Find the boundary between the bottom 5% of trial values and the rest.
 5. Subtract the portfolio at this boundary from the current value to find the value at risk.
 
-The 'functionname(trialValues)' function takes all our instruments and a number of trials to run, and spits out an array containing the portfolio values for each trial.
+The nameoffunction 'trialValues' takes all of the instruments and a number of trials to run, and spits out an array containing the portfolio values for each trial.
 
 
 <pre><code>
