@@ -31,15 +31,19 @@ It is possible to choose more complicated models, perhaps incorporating domain s
 
 The model also needs a process for simulating the behavior of market factors. A simple assumption is that each market factor follows a normal distribution. To capture the fact that market factors are often correlated – when NASDAQ is down, the Dow is likely to be suffering as well – multivariate normal distribution can be used with a non-diagonal covariance matrix. As above, a more complicated method of simulating the market or a different distribution for each market factor can be assumed, perhaps one with a fatter tail.
 
-To summarize, trial conditions are drawn from a multivariate normal distribution:
+# Running on Spark
 
+An issue with the Monte Carlo method is that it is computationally intensive. This means that getting accurate results for a large portfolio can require a large number of trials, and simulating each trial can be computationally involved. Spark proves its worth here.
 
+It allows you to express parallel computations across many machines using simple operators. A Spark job consists of a set of transformations on parallel collections. We simply pass in Scala (or Java or Python) functions and Spark handles distributing the computation across the cluster.  It is also fault tolerant, so if any machines or processes fail while the computation is running, we don’t need to restart from scratch.
 
-The value of a particular instrument in a particular trial is the dot product of the trial conditions and the instrument’s factor weightswi bounded by the instrument’s minimum and maximum value, ni and xi:
+A general sketch of our computation looks like:
 
-
-
-The portfolio’s value for the trial is the sum of all instrument values for that trial:
+1. Broadcast our instrument data to every node on the cluster. While a large portfolio might consist of millions of instruments, the most memory this should take is in the 10s of gigabytes, which is easily enough to fit into main memory on modern machines.
+2. Create a parallel collection (RDD) of seeds for our random number generators.
+3. Create a new parallel collection of portfolio values under random trial conditions by applying a function to each seed that generates a set of random trial conditions, applies them to each instrument to calculate the its value under those conditions, and then sums over all instruments.
+4. Find the boundary between the bottom 5% of trial values and the rest.
+5. Subtract the portfolio at this boundary from the current value to find the value at risk.
 
 
 <pre><code>
