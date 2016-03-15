@@ -113,4 +113,5 @@ Conclusion
 Spark can be utilised to for Monte Carlo simulations in financial applications.  It provides a flexible framework for leveraging the processing power of compute clusters that allow traders to investigate the level of risk in a given portfolio.
 
 [Link to blog](https://blog.cloudera.com/blog/2014/07/estimating-financial-risk-with-apache-spark/)
+
 [Link to Monte Carlo video](https://www.youtube.com/watch?v=3gcLRU24-w0)
