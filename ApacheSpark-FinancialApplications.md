@@ -18,12 +18,22 @@ A number of different methods are used to calculate VaR.
 
 It is worth noting that the Monte Carlo method **_isn't perfect_**.  The models for generating trial conditions and for inferring instrument performance from them must make simplifying assumptions, and the distribution that comes out won’t be more accurate than these models going in.
 
+Other Considerations
+-------------------
+
+Interactive Analysis
+So far we’ve presented the computation as a batch job; however, Spark also supports interactive settings. For example, analysts and traders might wish to see what happens when they tweak model parameters, filter the set of instruments considered to those matching some particular criteria, or add a trade that they’re about to execute into the mix. After broadcasting, Spark will keep the set of instruments in memory on every machine in the cluster, making them available for servicing interactive queries. If filtering on particular instrument attributes is routinely done, it might make sense to store the instruments as a map indexed by those attributes.
+
+Huge Instrument Data
+While it’s rare for a single portfolio to be too large to fit in entirety on every machine, working with huge portfolios composed of instruments like small business loans might require splitting up the portfolio data across machines.
+
 In its most general form the Monte Carlo method:
 * Defines a relationship between market conditions and each instrument’s returns
 * Poses “trials” consisting of random market conditions
 * Calculates the portfolio loss for each trial, and uses the aggregated trial data to build up a profile of the portfolio’s risk characteristics.
 
-# Using the Monte Carlo model
+Using the Monte Carlo model
+-----------------------------
 
 A Monte Carlo risk model typically phrases each instrument’s return in terms of a set of market factors. For example, one could use a simple linear model: instrument returns are calculated as a weighted sum of the values of the market factors. Different weights are chosen for each instrument for each market factor. The model is fitted for each instrument with a regression using historical data. On top of this, one can allow the instruments to have some optionality – each can be parameterized with a minimum and maximum value. This adds an element of non-linearity that the variance-covariance method has trouble handling, but which the Monte Carlo method can process with relative ease.
 
@@ -31,7 +41,8 @@ It is possible to choose more complicated models, perhaps incorporating domain s
 
 The model also needs a process for simulating the behavior of market factors. A simple assumption is that each market factor follows a normal distribution. To capture the fact that market factors are often correlated – when NASDAQ is down, the Dow is likely to be suffering as well – multivariate normal distribution can be used with a non-diagonal covariance matrix. As above, a more complicated method of simulating the market or a different distribution for each market factor can be assumed, perhaps one with a fatter tail.
 
-# Running on Spark
+Running on Spark
+-----------------
 
 An issue with the Monte Carlo method is that it is computationally intensive. This means that getting accurate results for a large portfolio can require a large number of trials, and simulating each trial can be computationally involved. Spark proves its worth here.
 
@@ -47,6 +58,49 @@ A general sketch of our computation looks like:
 
 
 <pre><code>
-Insert code
+def trialValues(seed: Long, numTrials: Int, instruments: Seq[Instrument],
+      factorMeans: Array[Double], factorCovariances: Array[Array[Double]]): Seq[Double] = {
+    val rand = new MersenneTwister(seed)
+    val multivariateNormal = new MultivariateNormalDistribution(rand, factorMeans,
+      factorCovariances)
+ 
+    val trialValues = new Array[Double](numTrials)
+    for (i <- 0 until numTrials) {
+      val trial = multivariateNormal.sample()
+      trialValues(i) = trialValue(trial, instruments)
+    }
+    trialValues
+  }
+ 
+  def trialValue(trial: Array[Double], instruments: Seq[Instrument]): Double = {
+    var totalValue = 0.0
+    for (instrument <- instruments) {
+      totalValue += instrumentTrialValue(instrument, trial)
+    }
+    totalValue
+  }
+ 
+  def instrumentTrialValue(instrument: Instrument, trial: Array[Double]): Double = {
+    var instrumentTrialValue = 0.0
+    var i = 0
+    while (i < trial.length) {
+      instrumentTrialValue += trial(i) * instrument.factorWeights(i)
+      i += 1
+    }
+    Math.min(Math.max(instrumentTrialValue, instrument.minValue), instrument.maxValue)
+  }
 
 </code></pre>
+
+The Spark code that runs it is on a cluster.  This gives a collection of simulated losses over many trials  One can then compute the VaR by investigating what happens at the bottom 5%.
+
+The simulation also contains far more information about risk characteristics of the portfolio.  This information can also be used to further ones understanding of the portfolio and its inherent risk.
+
+Other Considerations
+--------------------
+
+* Interactive Analysis
+So far we’ve presented the computation as a batch job; however, Spark also supports interactive settings. For example, analysts and traders might wish to see what happens when they tweak model parameters, filter the set of instruments considered to those matching some particular criteria, or add a trade that they’re about to execute into the mix. After broadcasting, Spark will keep the set of instruments in memory on every machine in the cluster, making them available for servicing interactive queries. If filtering on particular instrument attributes is routinely done, it might make sense to store the instruments as a map indexed by those attributes.
+
+* Huge Instrument Data
+While it’s rare for a single portfolio to be too large to fit in entirety on every machine, working with huge portfolios composed of instruments like small business loans might require splitting up the portfolio data across machines.
