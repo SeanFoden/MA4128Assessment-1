@@ -1,5 +1,8 @@
 Apache Spark
 =========
+Inline-style: 
+![alt text]( http://spark.apache.org/images/spark-logo-trademark.png"Logo")
+
 Financial Applications
 ----------
 Over recent years there has been significant progress in the area of risk assessment using the creation financial management portfolios that take risk into account.  This area of study is relatively new and has only gathered momentum since the 2000's.  Events around the world have highlighted the need for investors to be able accurately assess risks they may undertake while trading.
