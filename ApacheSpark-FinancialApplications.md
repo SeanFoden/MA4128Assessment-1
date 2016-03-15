@@ -1,6 +1,6 @@
 Apache Spark
 =========
-Inline-style: 
+
 ![alt text]( http://spark.apache.org/images/spark-logo-trademark.png)
 
 Financial Applications
