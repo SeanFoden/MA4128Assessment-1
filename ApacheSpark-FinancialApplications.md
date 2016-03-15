@@ -1,7 +1,7 @@
-+ Apache Spark
+                                          Apache Spark
 =========
 
-+ ![alt text]( http://spark.apache.org/images/spark-logo-trademark.png)
+            ![alt text]( http://spark.apache.org/images/spark-logo-trademark.png)
 
 Financial Applications
 ----------
