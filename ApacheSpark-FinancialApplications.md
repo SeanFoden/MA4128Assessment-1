@@ -100,7 +100,11 @@ Other Considerations
 --------------------
 
 * Interactive Analysis
-So far we’ve presented the computation as a batch job; however, Spark also supports interactive settings. For example, analysts and traders might wish to see what happens when they tweak model parameters, filter the set of instruments considered to those matching some particular criteria, or add a trade that they’re about to execute into the mix. After broadcasting, Spark will keep the set of instruments in memory on every machine in the cluster, making them available for servicing interactive queries. If filtering on particular instrument attributes is routinely done, it might make sense to store the instruments as a map indexed by those attributes.
+Spark supports interactive settings.  One can tweak model parameters along with filtering the set of instruments considered to some particular criteria.  
 
 * Huge Instrument Data
 While it’s rare for a single portfolio to be too large to fit in entirety on every machine, working with huge portfolios composed of instruments like small business loans might require splitting up the portfolio data across machines.
+
+Conclusion
+------------
+Spark can be utilised to for Monte Carlo simulations in financial applications.  It provides a flexible framework for leveraging the processing power of compute clusters that allow traders to investigate the level of risk in a given portfolio.
