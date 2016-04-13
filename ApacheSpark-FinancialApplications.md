@@ -112,7 +112,7 @@ While it’s rare for a single portfolio to be too large to fit in entirety on e
 
 Conclusion
 ------------
-Spark can be utilised to for Monte Carlo simulations in financial applications.  It provides a flexible framework for leveraging the processing power of compute clusters that allow traders to investigate the level of risk in a given portfolio.  The importance of such tools has been highlighted by recent financial events and current trends in the financial world.
+Spark can be utilised to for Monte Carlo simulations in financial applications.  It provides a flexible framework for leveraging the processing power of compute clusters that allow traders to investigate the level of risk in a given portfolio.
 
 [Link to blog](https://blog.cloudera.com/blog/2014/07/estimating-financial-risk-with-apache-spark/)
 
